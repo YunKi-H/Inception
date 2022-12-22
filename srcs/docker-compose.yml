@@ -14,24 +14,24 @@ services:
       - intra
     restart: always
 
-    wordpress:
+  wordpress:
     container_name: wordpress
     build: ./requirements/wordpress
 #     depends_on:
 #       - mariadb
     env_file:
-      - ./.env
+      - .env
     volumes:
       - wordpress:/var/www/html
     networks:
       - intra
     restart: always
 
-#     mariadb:
+#  mariadb:
 #     container_name: mariadb
 #     build: ./requirements/mariadb
 #     env_file:
-#       - ./.env
+#       - .env
 #     volumes:
 #       - database:/var/lib/mysql
 #     networks:
@@ -43,8 +43,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ~/data/wordpress
-      # device: /home/yuhwang/data/wordpress
+      device: /home/yuhwang/data/wordpress
       o: bind
 
 #   database:
