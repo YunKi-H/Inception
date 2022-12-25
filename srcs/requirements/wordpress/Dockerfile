@@ -1,41 +1,43 @@
 FROM		alpine:3.16
 
 RUN			apk update && apk upgrade
-RUN			apk add mariadb-client bash curl wget
+RUN			apk add bash curl wget
 
 RUN			mkdir -p /var/www/html
 RUN			mkdir -p /tmp
 
 # php
-RUN			apk add --no-cache \
+RUN			apk add \
 			php81 \
 			php81-fpm \
-			php81-opcache \
-			php81-pecl-apcu \
 			php81-mysqli \
-			php81-pgsql \
-			php81-json \
-			php81-openssl \
-			php81-curl \
+			php81-opcache \
+			php81-gd \
 			php81-zlib \
+			php81-curl \
+			php81-bcmath \
+			php81-ctype \
+			php81-iconv \
+			php81-intl \
+			php81-json \
+			php81-mbstring \
+			php81-mysqlnd \
+			php81-openssl \
+			php81-pdo \
+			php81-pdo_mysql \
+			php81-pdo_pgsql \
+			php81-pdo_sqlite \
+			php81-phar \
+			php81-posix \
+			php81-session \
 			php81-soap \
 			php81-xml \
-			php81-fileinfo \
-			php81-phar \
-			php81-intl \
-			php81-dom \
-			php81-xmlreader \
-			php81-ctype \
-			php81-session \
-			php81-iconv \
-			php81-tokenizer \
 			php81-zip \
-			php81-simplexml \
-			php81-mbstring \
-			php81-gd \
-			runit
+			libmcrypt-dev \
+			libltdl \
+			lighttpd
 
-COPY		./conf/wordpress.conf /etc/php/7.3/fpm/pool.d/www.conf
+COPY		./conf/wordpress.conf /etc/php/8.1/fpm/pool.d/www.conf
 COPY		./tools/wordpress.sh /tmp/wordpress.sh
 RUN			chmod +x /tmp/wordpress.sh
 
@@ -46,6 +48,7 @@ RUN			chown -R www-data:www-data /var/www/html
 
 COPY		./conf/wp-config.php ./
 
+# dumb-init
 RUN			apk add dumb-init
 RUN			chmod +x /usr/bin/dumb-init
 

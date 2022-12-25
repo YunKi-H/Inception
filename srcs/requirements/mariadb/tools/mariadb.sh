@@ -1,5 +1,6 @@
-# mkdir -p ${HOME}/data/database
-# mkdir -p ${HOME}/data/www
+mkdir -p /home/yuhwang/data/database
+mkdir -p /home/yuhwang/data/www
+mkdir -p /auth_pam_tool_dir/auth_pam_tool
 
 # /usr/bin/mysql_install_db --user=${MYSQL_ROOT} \
 # --basedir=/usr \
@@ -29,41 +30,42 @@
 
 # mkdir -p /home/yotak/data/db
 # mkdir -p /home/yotak/data/www
-sudo apt remove golang-docker-credential-helpers
+# apk del golang-docker-credential-helpers
 # --user myslqd(mysql 서버)를 구동하기 위한 사용자 이름
 # --basedir mysql설치 디렉토리 경로
 # --datadir mysql데이터 디렉토리 경로
 # https://pyrasis.com/book/DockerForTheReallyImpatient/Chapter16/02
-mysql_install_db --user=root --basedir=/usr --datadir=/var/lib/mysql
+/usr/bin/mysql_install_db --user=root --basedir=/usr --datadir=/var/lib/mysql
 
 # CREATE랑 GRANT사이에 들어가면 폭발....-- FLUSH PRIVILEGES;
 # GRANT ALL에서 IDENTIFIED BY $USER_PASSWORD
-cat > /tmp/mysql_init << EOF
-FLUSH PRIVILEGES;
-CREATE DATABASE IF NOT EXISTS $MARIADB_NAME;
-CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_USER_PASSWORD';
-GRANT ALL PRIVILEGES ON $MARIADB_NAME.* TO '$MYSQL_USER'@'%';
-ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
-FLUSH PRIVILEGES;
-EOF
+# cat > /tmp/mysql_init << EOF
+# FLUSH PRIVILEGES;
+# CREATE DATABASE IF NOT EXISTS $MARIADB_NAME;
+# CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_USER_PASSWORD';
+# GRANT ALL PRIVILEGES ON $MARIADB_NAME.* TO '$MYSQL_USER'@'%';
+# ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
+# FLUSH PRIVILEGES;
+# EOF
 
-/usr/bin/mysqld --user=root --bootstrap < /tmp/mysql_init
+# /usr/bin/mysqld --user=root --bootstrap < /tmp/mysql_init
 # rm -rf /tmp/sql
+cp /etc/my.cnf /etc/my.cnf.d/mariadb-server.cnf
 
-# sleep 10
+sleep 10
 
-# mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME";
+mysql -e "CREATE DATABASE IF NOT EXISTS $MARIADB_NAME";
 
-# mysql -e "CREATE USER IF NOT EXISTS '$USER'@'%' IDENTIFIED BY '$USER_PASSWORD'";
+mysql -e "CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_USER_PASSWORD'";
 
-# mysql -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$USER'@'%'";
+mysql -e "GRANT ALL PRIVILEGES ON $MARIADB_NAME.* TO '$MYSQL_USER'@'%'";
 
-# mysql -e "ALTER USER root@'localhost' IDENTIFIED BY '$DB_ROOT_PASSWORD'";
+mysql -e "ALTER USER root@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD'";
 
-# mysql -e "FLUSH PRIVILEGES";
+mysql -e "FLUSH PRIVILEGES";
 
-# mysqladmin -u root -p$DB_ROOT_PASSWORD shutdown
+mysqladmin -uroot -p$MYSQL_ROOT_PASSWORD shutdown
 
-/usr/bin/mysqld --user=root --datadir=/var/lib/mysql
+/usr/bin/mysqld --user=root -p$MYSQL_ROOT_PASSWORD --datadir=/var/lib/mysql
 
 # while true; do { sleep 1 }; done;

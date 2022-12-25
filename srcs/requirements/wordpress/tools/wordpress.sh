@@ -2,11 +2,13 @@
 sleep 5
 
 #download wp-cli (wordpress command line interface)
-curl				-O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-chmod				+x wp-cli.phar
-mv					-f wp-cli.phar /usr/local/bin/wp
+curl	-O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+chmod	+x wp-cli.phar
+mv		-f wp-cli.phar /usr/local/bin/wp
 
-/usr/local/bin/wp	core download --allow-root --path="/var/www/html"
+ln -s /usr/bin/php81 /usr/bin/php
+
+/usr/local/bin/wp	core download --allow-root --path=/var/www/html
 
 # move config file
 mv					./wp-config.php /var/www/html/wp-config.php
@@ -22,9 +24,9 @@ mv					./wp-config.php /var/www/html/wp-config.php
 #   - path : path to the wordpress files
 /usr/local/bin/wp	core install \
 					--allow-root \
-					--path="/var/www/html" \
+					--path=/var/www/html \
 					--url=${DOMAIN_NAME} \
-					--title=inception \
+					--title=Inception \
 					--admin_user=${MYSQL_USER} \
 					--admin_password=${MYSQL_USER_PASSWORD} \
 					--admin_email=${MYSQL_USER}@student.42seoul.kr \
@@ -38,11 +40,12 @@ mv					./wp-config.php /var/www/html/wp-config.php
 #   - user_pass : The user password. (Default: randomly generated)
 /usr/local/bin/wp	user create \
 					--allow-root \
-					--path="/var/www/html" \
+					--path=/var/www/html \
 					${MYSQL_USER} \
 					${MYSQL_USER}@student.42seoul.kr \
 					--role=author \
 					--user_pass=${MYSQL_USER_PASSWORD}
 
 # no subshell is created and the current process is replaced
+sleep 5
 exec	php-fpm81 -F

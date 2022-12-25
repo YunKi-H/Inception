@@ -21,8 +21,6 @@ COPY		./conf/nginx.conf /etc/nginx/http.d/default.conf
 RUN			apk add dumb-init
 RUN			chmod +x /usr/bin/dumb-init
 
-COPY		./conf/index.html /var/www/html/index.html
-
 ENTRYPOINT	["/usr/bin/dumb-init", "--"]
 
 CMD			["nginx", "-g", "daemon off;"]

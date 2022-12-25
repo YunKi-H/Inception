@@ -8,9 +8,7 @@ RUN			apk add mariadb-common
 RUN			apk add mariadb-client
 RUN			apk add mariadb-server-utils
 
-COPY		./conf/mariadb.conf /etc/mysql/mariadb.conf
-COPY		./conf/mariadb.conf /etc/mariadb.conf
-COPY		./conf/mariadb.conf ~/mariadb.conf
+COPY		./conf/mariadb.conf /etc/my.conf
 
 RUN			mkdir -p /run/mysqld
 RUN			mkdir -p /var/lib/mysql
