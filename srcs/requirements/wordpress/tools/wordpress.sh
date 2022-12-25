@@ -1,18 +1,6 @@
-#sleep for mysql starting
-sleep 5
+mv /tmp/wp-config.php /var/www/html/wp-config.php
 
-#download wp-cli (wordpress command line interface)
-curl	-O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-chmod	+x wp-cli.phar
-mv		-f wp-cli.phar /usr/local/bin/wp
-
-ln -s /usr/bin/php81 /usr/bin/php
-
-/usr/local/bin/wp	core download --allow-root --path=/var/www/html
-
-# move config file
-mv					./wp-config.php /var/www/html/wp-config.php
-
+wp core download --allow-root --path=/var/www/html
 # WordPress install
 # https://developer.wordpress.org/cli/commands/core/install/
 #   - url : the address of the new site
@@ -22,15 +10,15 @@ mv					./wp-config.php /var/www/html/wp-config.php
 #   - admin_email : the email address for the admin user
 #   - skip-email : don't send an email notification to the new admin user
 #   - path : path to the wordpress files
-/usr/local/bin/wp	core install \
-					--allow-root \
-					--path=/var/www/html \
-					--url=${DOMAIN_NAME} \
-					--title=Inception \
-					--admin_user=${MYSQL_USER} \
-					--admin_password=${MYSQL_USER_PASSWORD} \
-					--admin_email=${MYSQL_USER}@student.42seoul.kr \
-					--skip-email
+wp	core install \
+	--allow-root \
+	--path=/var/www/html \
+	--url=${DOMAIN_NAME} \
+	--title=Inception \
+	--admin_user=${WORDPRESS_ADMIN} \
+	--admin_password=${WORDPRESS_ADMIN_PASSWORD} \
+	--admin_email=${WORDPRESS_ADMIN}@student.42seoul.kr \
+	--skip-email
 
 # WordPress User Create
 # https://developer.wordpress.org/cli/commands/user/create/
@@ -38,14 +26,12 @@ mv					./wp-config.php /var/www/html/wp-config.php
 #   - role : The role of the user to create. (Default: default role)
 #            values can be ‘administrator’, ‘editor’, ‘author’, ‘contributor’, ‘subscriber’
 #   - user_pass : The user password. (Default: randomly generated)
-/usr/local/bin/wp	user create \
-					--allow-root \
-					--path=/var/www/html \
-					${MYSQL_USER} \
-					${MYSQL_USER}@student.42seoul.kr \
-					--role=author \
-					--user_pass=${MYSQL_USER_PASSWORD}
+wp	user create \
+	--allow-root \
+	--path=/var/www/html \
+	${WORDPRESS_USER} \
+	${WORDPRESS_USER}@student.42seoul.kr \
+	--role=author \
+	--user_pass=${WORDPRESS_USER_PASSWORD}
 
-# no subshell is created and the current process is replaced
-sleep 5
-exec	php-fpm81 -F
+php-fpm8 -F -R

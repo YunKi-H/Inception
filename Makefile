@@ -6,6 +6,9 @@ all:
 	mkdir -p ${HOME}/data/database
 	sudo $(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) up -d --build --force-recreate
 
+host:
+	sudo echo "127.0.0.1 yuhwang.42.fr" >> /etc/hosts
+
 clean:
 	sudo $(DOCKER_COMPOSE) -f $(DOCKER_COMPOSE_FILE) down -v --rmi all --remove-orphans
 

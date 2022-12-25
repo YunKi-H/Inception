@@ -20,17 +20,17 @@
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', getenv("MARIADB_NAME") );
+define( 'DB_NAME', getenv("WORDPRESS_DB") );
 
 /** Database username */
-define( 'DB_USER', getenv("MYSQL_USER") );
+define( 'DB_USER', getenv("WORDPRESS_USER") );
 
 /** Database password */
-define( 'DB_PASSWORD', getenv("MYSQL_USER_PASSWORD") );
+define( 'DB_PASSWORD', getenv("WORDPRESS_USER_PASSWORD") );
 
 /** Database hostname */
-// define( 'DB_HOST', 'mariadb' );
-define('DB_HOST', '127.0.0.1:3306');
+define( 'DB_HOST', getenv("MARIADB_HOST") );
+// define('DB_HOST', '127.0.0.1:3306');
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
@@ -90,7 +90,7 @@ define( 'WP_DEBUG', true );
 
 /** Absolute path to the WordPress directory. */
 if ( ! defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', __DIR__ . '/' );
+	define( 'ABSPATH', __DIR__ . '/tmp' );
 }
 
 /** Sets up WordPress vars and included files. */

@@ -1,52 +1,36 @@
 FROM		alpine:3.16
 
 RUN			apk update && apk upgrade
-RUN			apk add bash curl wget
-
-RUN			mkdir -p /var/www/html
-RUN			mkdir -p /tmp
 
 # php
-RUN			apk add \
-			php81 \
-			php81-fpm \
-			php81-mysqli \
-			php81-opcache \
-			php81-gd \
-			php81-zlib \
-			php81-curl \
-			php81-bcmath \
-			php81-ctype \
-			php81-iconv \
-			php81-intl \
-			php81-json \
-			php81-mbstring \
-			php81-mysqlnd \
-			php81-openssl \
-			php81-pdo \
-			php81-pdo_mysql \
-			php81-pdo_pgsql \
-			php81-pdo_sqlite \
-			php81-phar \
-			php81-posix \
-			php81-session \
-			php81-soap \
-			php81-xml \
-			php81-zip \
-			libmcrypt-dev \
-			libltdl \
-			lighttpd
+RUN			apk add --no-cache \
+			mariadb-client \
+			php8 \
+			php8-fpm \
+			php8-phar \
+			php8-mysqli \
+			php8-mysqlnd \
+			php8-openssl \
+			php8-json \
+			php8-curl \
+			php8-exif \
+			php8-dom \
+			php8-mbstring \
+			php8-fileinfo \
+			php8-xml \
+			php8-zip
 
-COPY		./conf/wordpress.conf /etc/php/8.1/fpm/pool.d/www.conf
+RUN			wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN			chmod +x wp-cli.phar
+RUN			mv wp-cli.phar /usr/bin/wp
+
+COPY		./conf/wordpress.conf /etc/php8/php-fpm.d/www.conf
 COPY		./tools/wordpress.sh /tmp/wordpress.sh
-RUN			chmod +x /tmp/wordpress.sh
-
-RUN			chmod 777 -R /var/www/html
+RUN			chmod 777 /tmp/wordpress.sh
 
 RUN			adduser -u 82 -D -S -G www-data www-data
-RUN			chown -R www-data:www-data /var/www/html
 
-COPY		./conf/wp-config.php ./
+COPY		./conf/wp-config.php /tmp/wp-config.php
 
 # dumb-init
 RUN			apk add dumb-init
@@ -54,6 +38,7 @@ RUN			chmod +x /usr/bin/dumb-init
 
 EXPOSE		9000
 
+WORKDIR		/var/www/html
 ENTRYPOINT	["/usr/bin/dumb-init", "--"]
 
 CMD			["sh", "/tmp/wordpress.sh"]
