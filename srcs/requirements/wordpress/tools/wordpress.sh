@@ -3,13 +3,13 @@ mv /tmp/wp-config.php /var/www/html/wp-config.php
 wp core download --allow-root --path=/var/www/html
 # WordPress install
 # https://developer.wordpress.org/cli/commands/core/install/
+#   - path : path to the wordpress files
 #   - url : the address of the new site
 #   - title : the title of the new site
 #   - admin_user : the name of the admin user
 #   - admin_password : the password for the admin user (default to randomly generated string)
 #   - admin_email : the email address for the admin user
 #   - skip-email : don't send an email notification to the new admin user
-#   - path : path to the wordpress files
 wp	core install \
 	--allow-root \
 	--path=/var/www/html \

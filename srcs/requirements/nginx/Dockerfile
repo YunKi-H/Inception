@@ -1,11 +1,12 @@
 FROM		alpine:3.16
 
 RUN			apk update && apk upgrade
-# nginx
+
+# install nginx
 RUN			apk add nginx
 RUN			mkdir -p /var/www/html
 
-# openssl
+# install && setting openssl
 RUN			apk add openssl
 RUN			mkdir -p /etc/nginx/ssl
 RUN			openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \

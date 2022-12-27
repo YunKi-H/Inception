@@ -2,7 +2,7 @@ FROM		alpine:3.16
 
 RUN			apk update && apk upgrade
 
-# php
+# install php
 RUN			apk add --no-cache \
 			mariadb-client \
 			php8 \
@@ -20,10 +20,12 @@ RUN			apk add --no-cache \
 			php8-xml \
 			php8-zip
 
+# install wp-cli
 RUN			wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 RUN			chmod +x wp-cli.phar
 RUN			mv wp-cli.phar /usr/bin/wp
 
+# move setting files
 COPY		./conf/wordpress.conf /etc/php8/php-fpm.d/www.conf
 COPY		./tools/wordpress.sh /tmp/wordpress.sh
 RUN			chmod 777 /tmp/wordpress.sh
@@ -36,9 +38,10 @@ COPY		./conf/wp-config.php /tmp/wp-config.php
 RUN			apk add dumb-init
 RUN			chmod +x /usr/bin/dumb-init
 
-EXPOSE		9000
-
 WORKDIR		/var/www/html
+
 ENTRYPOINT	["/usr/bin/dumb-init", "--"]
 
 CMD			["sh", "/tmp/wordpress.sh"]
+
+EXPOSE		9000
