@@ -45,14 +45,14 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /Users/maemi/data/wordpress
+      device: /home/yuhwang/data/wordpress
       o: bind
 
   db:
     driver: local
     driver_opts:
       type: none
-      device: /Users/maemi/data/database
+      device: /home/yuhwang/data/database
       o: bind
 
 networks:
