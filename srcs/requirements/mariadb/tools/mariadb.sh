@@ -2,23 +2,6 @@ mkdir -p /auth_pam_tool_dir/auth_pam_tool
 
 mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
 
-# /usr/bin/mysqld --user=mysql --bootstrap << EOF
-# USE mysql;
-# FLUSH PRIVILEGES;
-
-# DROP DATABASE IF EXISTS test;
-# DELETE FROM mysql.db WHERE Db='test';
-
-# DELETE FROM mysql.user WHERE User='';
-# DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
-# ALTER USER 'root'@'localhost' IDENTIFIED BY '$MARIADB_ROOT_PASSWORD';
-
-# CREATE DATABASE IF NOT EXISTS $WORDPRESS_DB;
-# CREATE USER IF NOT EXISTS '$WORDPRESS_USER'@'%' IDENTIFIED by '$WORDPRESS_USER_PASSWORD';
-# GRANT ALL PRIVILEGES ON $WORDPRESS_DB.* TO '$WORDPRESS_USER'@'%';
-
-# FLUSH PRIVILEGES;
-# EOF
 /usr/bin/mysqld --user=mysql --bootstrap << EOF
 USE mysql;
 FLUSH PRIVILEGES;
